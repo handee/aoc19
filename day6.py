@@ -1,40 +1,32 @@
 
+from collections import defaultdict
 
 
-class Node:
-    def __init__(self, cargo, leaves=[]):
-        self.cargo = cargo
-        self.leaves = leaves
+#with open('input/day6.txt') as f:
+ # orbits = f.read().splitlines()
 
-    def __str__(self):
-        return str(self.cargo)
     
-    def add(self, parent, child):
-        if self.cargo == parent:
-           self.leaves[:]=child
-           return(True)
-        else:
-           for leaf in self.leaves:
-              leaf.add(parent,child)
-
-def print_tree(tree):
-    if tree == None: return 0
-    print("-",tree.cargo)
-    for leaf in self.leavese:
-       print_tree(leaf)
-
-
 input_test="COM)B, B)C, C)D, D)E, E)F, B)G, G)H, D)I, E)J, J)K, K)L"
 
-orbits=input_test.split(",")
+orbits=input_test.split(", ")
 
-root_object,o2=orbits[0].split(")")
-
-orbittree=Node(root_object)
+d= defaultdict(list) # a dictionary/hash table with keys being objects and values being lists of objects
 for orbit in orbits:
    object1,object2=orbit.split(")")
-   orbittree.add(object1,object2)
+   d[object1].append(object2)
 
-print_tree(orbittree)
+o= {} # another dictionary but not a dictionary of lists this time
+def count_orbits(sattelite, counter):
+  o[sattelite] = counter
+  print("Sattelite = ",sattelite," d[sattelite] = ",d[sattelite])
+  for orbiter in d[sattelite]:
+    count_orbits(orbiter,counter+1)
+
+
+count_orbits("COM",0)
+print d
+print o
+total=sum(o.values())
+print ("Total orbits  = ",total)
 
 
